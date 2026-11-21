@@ -1,129 +1,139 @@
-# Sherlock
+﻿# Sherlock
 
 > **GrowthX Verification Code:** `G69FNZ`
 
 <p align="center">
   <br>
-  <a href="https://sherlockproject.xyz/" target="_blank"><img src="docs/images/sherlock-logo.png" alt="sherlock"/></a>
+  <a href="https://sherlockproject.xyz/" target="_blank"><img src="docs/images/sherlock-logo.png" alt="sherlock" width="220"/></a>
   <br>
-  <span>Hunt down social media accounts by username across <a href="https://sherlockproject.xyz/sites">400+ social networks</a></span>
+  <b>Hunt down social media accounts by username across 400+ social networks</b>
   <br>
 </p>
 
-<p align="center">
-  <a href="https://sherlockproject.xyz/installation">Installation</a>
-  &nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;
-  <a href="https://sherlockproject.xyz/usage">Usage</a>
-  &nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;
-  <a href="https://sherlockproject.xyz/contribute">Contributing</a>
-</p>
+---
 
-<p align="center">
-<img width="70%" height="70%" src="docs/images/demo.png" alt="demo"/>
-</p>
+## 🔍 About Sherlock
 
+**Sherlock** is a powerful open-source OSINT (Open Source Intelligence) command-line tool used to find usernames across more than 400 social media platforms, online communities, and websites. By providing a target username, Sherlock sends concurrent asynchronous queries to detect whether an account with that username exists on platforms such as GitHub, Twitter/X, Instagram, Reddit, TikTok, LinkedIn, YouTube, and hundreds more.
 
-## Installation
+---
 
-<div align="center">
-  <a href="https://sponsors.sherlockproject.xyz/go/readme-1"><img src="https://sponsors.sherlockproject.xyz/banner/readme-1" width="100%"></a>
-</div>
+## ✨ Features
 
-<div align="center">
-<a href="https://sponsors.sherlockproject.xyz/go/readme-2"><img src="https://sponsors.sherlockproject.xyz/banner/readme-2" width="49.8%"></a>&#8202;&#8202;<a href="https://sponsors.sherlockproject.xyz/go/readme-3"><img src="https://sponsors.sherlockproject.xyz/banner/readme-3" width="49.8%"></a>
-</div>
+- **Extensive Site Coverage**: Actively checks across **400+ platforms** simultaneously.
+- **Fast & Asynchronous**: Leverages Python `asyncio` and `requests-futures` for high-throughput concurrent requests.
+- **Multi-User & Pattern Support**: Search for a single username, multiple usernames, or pattern variations (`{?}` replaces with `_`, `-`, `.`).
+- **Versatile Export Formats**: Export findings into clean **TXT**, **CSV**, or Microsoft Excel (**XLSX**) spreadsheets.
+- **Tor & Proxy Routing**: Route queries through HTTP/SOCKS proxies or Tor for anonymity and bypassing rate limits (`--proxy socks5://127.0.0.1:9050`).
+- **Targeted Scanning**: Restrict searches to specific platforms (`--site github --site reddit`).
+- **Browser Auto-Open**: Automatically open discovered profile URLs directly in your default browser (`--browse`).
+- **NSFW Filtering**: Option to include or exclude adult / NSFW platforms (`--nsfw`).
 
-<br>
+---
 
-> [!WARNING]  
-> Packages for ParrotOS and Ubuntu 24.04, maintained by a third party, appear to be __broken__.  
-> Users of these systems should defer to [`uv`](https://docs.astral.sh/uv/)/`pipx`/`pip` or Docker.
+## 🚀 Installation & Setup
 
-| Method | Notes |
-| - | - |
-| `pipx install sherlock-project` | `pip` or [`uv`](https://docs.astral.sh/uv/) may be used in place of `pipx` |
-| `docker run -it --rm sherlock/sherlock` |
-| `dnf install sherlock-project` | |
+### Prerequisites
+- Python 3.9 or higher
+- Git
 
-Community-maintained packages are available for Debian (>= 13), Ubuntu (>= 22.10), Homebrew, Kali, and BlackArch. These packages are not directly supported or maintained by the Sherlock Project.
-
-See all alternative installation methods [here](https://sherlockproject.xyz/installation).
-
-## General usage
-
-To search for only one user:
+### 1. Clone the Repository
 ```bash
-sherlock user123
+git clone https://github.com/kanna857/sherlock.git
+cd sherlock
 ```
 
-To search for more than one user:
+### 2. Install Dependencies
+Using Poetry:
+```bash
+pip install poetry
+poetry install
+```
+
+Or install in editable mode using standard `pip`:
+```bash
+pip install .
+```
+
+### 3. Docker Installation
+You can also run Sherlock in an isolated Docker container without local dependencies:
+```bash
+docker build -t sherlock .
+docker run -it --rm sherlock user123
+```
+
+---
+
+## 💻 How to Run & Usage Examples
+
+### Running via Python Module
+If you have cloned the source repository:
+```bash
+python -m sherlock_project user123
+```
+
+### Basic Search (Single Username)
+Search for a single target username across all 400+ platforms:
+```bash
+sherlock target_username
+```
+
+### Search Multiple Usernames
+Check multiple usernames in a single run:
 ```bash
 sherlock user1 user2 user3
 ```
 
-Accounts found will be stored in an individual text file with the corresponding username (e.g ```user123.txt```).
+### Output Results to CSV or Excel
+Save results to structured spreadsheet files for reporting:
+```bash
+sherlock user123 --csv
+sherlock user123 --xlsx
+```
+Individual text reports are also generated by default (e.g., `user123.txt`).
 
-```console
-$ sherlock --help
-usage: sherlock [-h] [--version] [--verbose] [--folderoutput FOLDEROUTPUT] [--output OUTPUT] [--csv] [--xlsx] [--site SITE_NAME] [--proxy PROXY_URL] [--dump-response]
-                [--json JSON_FILE] [--timeout TIMEOUT] [--print-all] [--print-found] [--no-color] [--browse] [--local] [--nsfw] [--txt] [--ignore-exclusions]
-                USERNAMES [USERNAMES ...]
-
-Sherlock: Find Usernames Across Social Networks (Version 0.16.0)
-
-positional arguments:
-  USERNAMES             One or more usernames to check with social networks. Check similar usernames using {?} (replace to '_', '-', '.').
-
-options:
-  -h, --help            show this help message and exit
-  --version             Display version information and dependencies.
-  --verbose, -v, -d, --debug
-                        Display extra debugging information and metrics.
-  --folderoutput FOLDEROUTPUT, -fo FOLDEROUTPUT
-                        If using multiple usernames, the output of the results will be saved to this folder.
-  --output OUTPUT, -o OUTPUT
-                        If using single username, the output of the result will be saved to this file.
-  --csv                 Create Comma-Separated Values (CSV) File.
-  --xlsx                Create the standard file for the modern Microsoft Excel spreadsheet (xlsx).
-  --site SITE_NAME      Limit analysis to just the listed sites. Add multiple options to specify more than one site.
-  --proxy PROXY_URL, -p PROXY_URL
-                        Make requests over a proxy. e.g. socks5://127.0.0.1:1080
-  --dump-response       Dump the HTTP response to stdout for targeted debugging.
-  --json JSON_FILE, -j JSON_FILE
-                        Load data from a JSON file or an online, valid, JSON file. Upstream PR numbers also accepted.
-  --timeout TIMEOUT     Time (in seconds) to wait for response to requests (Default: 60)
-  --print-all           Output sites where the username was not found.
-  --print-found         Output sites where the username was found (also if exported as file).
-  --no-color            Don't color terminal output
-  --browse, -b          Browse to all results on default browser.
-  --local, -l           Force the use of the local data.json file.
-  --nsfw                Include checking of NSFW sites from default list.
-  --txt                 Enable creation of a txt file
-  --ignore-exclusions   Ignore upstream exclusions (may return more false positives)
+### Search Specific Websites Only
+Limit analysis to specified sites to accelerate results:
+```bash
+sherlock user123 --site github --site reddit --site instagram
 ```
 
-## Credits
+### Anonymized Search via Tor / Proxy
+Route queries through a local Tor daemon or custom proxy:
+```bash
+sherlock user123 --proxy socks5://127.0.0.1:9050
+```
 
-Thank you to everyone who has contributed to Sherlock! ❤️
+### Auto-Open Found Accounts in Browser
+Open all positive hits directly in your web browser:
+```bash
+sherlock user123 --browse
+```
 
-<a href="https://github.com/sherlock-project/sherlock/graphs/contributors">
-  <img src="https://contrib.rocks/image?&columns=25&max=10000&&repo=sherlock-project/sherlock" alt="contributors"/>
-</a>
+---
 
-## Star History
+## 🛠️ Command-Line Options Reference
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=sherlock-project/sherlock&type=Date&theme=dark" />
-  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=sherlock-project/sherlock&type=Date" />
-  <img alt="Sherlock Project Star History Chart" src="https://api.star-history.com/svg?repos=sherlock-project/sherlock&type=Date" />
-</picture>
+| Flag | Description |
+|---|---|
+| `-h`, `--help` | Show command line options and help message |
+| `--version` | Display version information and dependencies |
+| `--csv` | Create a Comma-Separated Values (CSV) report |
+| `--xlsx` | Create a Microsoft Excel (.xlsx) spreadsheet report |
+| `--output OUTPUT`, `-o` | Save single username result to a specific file |
+| `--folderoutput FOLDER` | Save multiple username reports into a specific directory |
+| `--site SITE_NAME` | Limit analysis to specific site(s) |
+| `--proxy PROXY_URL`, `-p` | Route requests through a proxy (e.g. `socks5://127.0.0.1:9050`) |
+| `--timeout TIMEOUT` | Time (in seconds) to wait for response (default: 60) |
+| `--browse`, `-b` | Open all discovered profiles in default web browser |
+| `--print-found` | Print only found accounts to stdout |
+| `--print-all` | Print both found and not-found results |
+| `--nsfw` | Include adult / NSFW sites in scan |
+| `--no-color` | Disable colored terminal output |
+| `-v`, `--verbose` | Show verbose debugging information |
 
-## License
+---
 
-MIT © Sherlock Project<br/>
-Creator - [Siddharth Dushantha](https://github.com/sdushantha)
+## 📄 License
 
-<!-- Reference Links -->
-
-[ext_pypi]: https://pypi.org/project/sherlock-project/
-[ext_brew]: https://formulae.brew.sh/formula/sherlock
+This project is licensed under the [MIT License](LICENSE).
